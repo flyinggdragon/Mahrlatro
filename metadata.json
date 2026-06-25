@@ -1,9 +1,0 @@
-{ 
-    "id": "Mahrlatro",
-    "name": "Mahrlatro",
-    "author": ["FlyingDragon"],
-    "description": "This mod brings to life in Balatro one of our universe's most beloved characters: TheMahr.",
-    "prefix": "mhrltr",
-    "main_file": "main.lua",
-    "version": "0.0.1"
-}
