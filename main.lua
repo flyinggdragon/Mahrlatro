@@ -2,8 +2,8 @@
 --71x95
 
 SMODS.Atlas {
-    key = 'placeholders',
-    path = 'placeholders.png',
+    key = 'atlas',
+    path = 'atlas.png',
     px = 71,
     py = 95
 }

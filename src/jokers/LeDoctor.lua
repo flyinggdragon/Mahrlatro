@@ -1,8 +1,8 @@
 SMODS.Joker {
     key = 'ledoctor',
-    atlas = 'placeholders',
+    atlas = 'atlas',
     pos = {
-        x = 1,
+        x = 5,
         y = 0
     },
 
@@ -21,15 +21,20 @@ SMODS.Joker {
         return {
             vars = {
                 card.ability.extra.xmult,
+                card.ability.extra.currentxmult,
                 card.ability.extra.spent
             }
         }
     end,
 
     calculate = function(self, card, context)
+        if context.buying_card then
+            card.ability.extra.spent = card.ability.extra.spent + context.card.cost
+        end
+
         if context.joker_main then
             return {
-                xmult = card.ability.extra.xmult,
+                x_mult = card.ability.extra.currentxmult,
             }
         end
     end

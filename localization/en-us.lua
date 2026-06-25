@@ -5,13 +5,13 @@ return {
                 name = '~Le Doctor',
                 text = {
                     {
-                        'Adds {X:mult,C:white}X#1#{} to the Mult',
+                        'Gains {X:mult,C:white}X#1#{} Mult',
                         'for each {C:money}$20{} spent.',
-                        'XMult is halved at the end of round',
+                        'Halved at the end of the round.',
                     },
                     {
-                        'Currently: {X:mult,C:white}X#2#',
-                        '{C:inactive}To next upgrade:{} {C:money}#3#{}/20'
+                        'Currently {X:mult,C:white}X#2#',
+                        '{C:inactive}To next upgrade:{} {C:money}$#3#{}/{C:money}$20{}'
                     }
                 }
             }
