@@ -6,12 +6,13 @@ SMODS.Joker{ --The Doctor
         ['text'] = {
             [1] = {
                 'Gains {X:mult,C:white}X#1#{} Mult',
-                'for each {C:money}$20{} spent.',
-                'Halved at the end of the round.',
+                'for each {C:money}$#2#{} spent.',
+                'XMult is halved at',
+                'the end of the round.'
             },
             [2] = {
-                'Currently {X:mult,C:white}X#2#',
-                '{C:inactive}To next upgrade:{} {C:money}$#3#{}/{C:money}$20{}'
+                'Currently {X:mult,C:white}X#3#',
+                '{C:inactive}To next upgrade:{} {C:money}$#4#{}/{C:money}$20{}'
             }
         },
         ['unlock'] = {
@@ -42,30 +43,64 @@ SMODS.Joker{ --The Doctor
 
     config = {
         extra = {
-            xmult = 2.0,
-            currentxmult = 1.0,
-            spent = 0.0
+            x_mult_gained = 1.0,
+            upgrade_threshold = 20,
+            current_x_mult = 1.0,
+            to_next = 0
         }
     },
     
     loc_vars = function(self, info_queue, card)
         return {
             vars = {
-                card.ability.extra.xmult,
-                card.ability.extra.currentxmult,
-                card.ability.extra.spent
+                card.ability.extra.x_mult_gained,
+                card.ability.extra.upgrade_threshold,
+                card.ability.extra.current_x_mult,
+                card.ability.extra.to_next,
             }
         }
     end,
     
     calculate = function(self, card, context)
-        if context.buying_card then
-            card.ability.extra.spent = card.ability.extra.spent + context.card.cost
+        -- If joker/booster pack is bought, adds its cost to the count.
+        if context.buying_card or context.open_booster then
+            card.ability.extra.to_next = card.ability.extra.to_next + context.card.cost
+        end
+
+        -- If shop is rerolled, adds cost to the count.
+        if context.reroll_shop then
+           card.ability.extra.to_next = card.ability.extra.to_next + G.GAME.current_round.reroll_cost - 1
+        end
+
+        -- If spent count exceeds 20, adds to the XMult and then resets the count.
+        if (card.ability.extra.to_next >= card.ability.extra.upgrade_threshold) then
+            local times_over = math.floor(card.ability.extra.to_next / card.ability.extra.upgrade_threshold)
+            
+            card.ability.extra.to_next = card.ability.extra.to_next - (card.ability.extra.upgrade_threshold * times_over)
+            
+            if (times_over > 0) then
+                for i = 1, times_over do
+                    SMODS.scale_card(card, {
+                        ref_table = card.ability.extra,
+                        ref_value = 'current_x_mult',
+                        scalar_value = 'x_mult_gained',
+                        message_colour = G.C.ATTENTION
+                    })
+                end
+            end
+        end
+
+        if context.end_of_round and not context.repetition and not context.individual then
+            card.ability.extra.current_x_mult = card.ability.extra.current_x_mult / 2
+
+            return { 
+                message = 'Halved!'
+            }
         end
 
         if context.joker_main then
             return {
-                x_mult = card.ability.extra.currentxmult,
+                x_mult = card.ability.extra.current_x_mult,
             }
         end
     end
