@@ -61,6 +61,7 @@ if true then
     assert(SMODS.load_file("jokers/wildcat.lua"))()
     assert(SMODS.load_file("jokers/lehospital.lua"))()
     assert(SMODS.load_file("jokers/thedoctor.lua"))()
+    assert(SMODS.load_file("jokers/normalguy.lua"))()
     assert(SMODS.load_file("jokers/wee.lua"))()
 end
 -- load the consumables

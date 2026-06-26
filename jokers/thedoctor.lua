@@ -1,4 +1,3 @@
-
 SMODS.Joker{ --The Doctor
     key = "thedoctor",
     loc_txt = {
@@ -91,11 +90,22 @@ SMODS.Joker{ --The Doctor
         end
 
         if context.end_of_round and not context.repetition and not context.individual then
-            card.ability.extra.current_x_mult = card.ability.extra.current_x_mult / 2
+            local current = card.ability.extra.current_x_mult
+            
+            if (current / 2 < 1) then
+                card.ability.extra.current_x_mult = 1
 
-            return { 
-                message = 'Halved!'
-            }
+                return {
+                    message = 'Back where it began!'
+                }
+            
+            else
+                card.ability.extra.current_x_mult = current / 2
+
+                return {
+                    message = 'Halved!'
+                }
+            end
         end
 
         if context.joker_main then
